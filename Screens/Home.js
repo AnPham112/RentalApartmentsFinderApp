@@ -1,10 +1,14 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>Home Screen</Text>
+      <Button
+        mode="contained"
+        onPress={() => navigation.navigate('List')}
+      >Get started</Button>
     </View>
   )
 }

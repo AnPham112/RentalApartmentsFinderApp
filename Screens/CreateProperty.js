@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ScrollView, View, StyleSheet, Alert } from 'react-native';
+import { ScrollView, View, StyleSheet, Alert, Text } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
-import { Picker } from '@react-native-picker/picker'
+import { Picker } from '@react-native-picker/picker';
 
 const CreateProperty = ({ navigation, route }) => {
   const getDetails = (category) => {
@@ -36,28 +36,69 @@ const CreateProperty = ({ navigation, route }) => {
   const [monthlyPrice, setMonthlyPrice] = useState(getDetails("price"));
   const [reporter, setReporter] = useState(getDetails("reporter"));
   const [note, setNote] = useState(getDetails("note"));
+  const [propertyNameError, setPropertyNameError] = useState('');
+  const [addressError, setAddressError] = useState('');
+  const [typeError, setTypeError] = useState('');
+  const [bedroomError, setBedroomError] = useState('');
+  const [priceError, setPriceError] = useState('');
+  const [reporterError, setReporterError] = useState('');
+
+  const createPropertyValidation = () => {
+    if (propertyName == "") {
+      setPropertyNameError("Property name is required")
+    } else {
+      setPropertyNameError("")
+    }
+    if (address == "") {
+      setAddressError("Property address is required")
+    } else {
+      setAddressError("")
+    }
+    if (type == "") {
+      setTypeError("Type is required")
+    } else {
+      setTypeError("")
+    }
+    if (bedroom == "") {
+      setBedroomError("The number of bedrooms is required")
+    } else {
+      setBedroomError("")
+    }
+    if (monthlyPrice == "") {
+      setPriceError("Monthly price is required")
+    } else {
+      setPriceError("")
+    }
+    if (reporter == "") {
+      setReporterError("Reporter name is required")
+    } else {
+      setReporterError("")
+    }
+  }
 
   const _submitData = () => {
-    fetch("http://192.168.1.24:3000/create-property", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: propertyName,
-        address: address,
-        type: type,
-        furniture: furniture,
-        bedroom: bedroom,
-        price: monthlyPrice,
-        reporter: reporter,
-        note: note
-      })
-    }).then(res => res.json())
-      .then(data => {
-        Alert.alert(`${data.name} is created successfully`)
-        navigation.navigate("List")
-      }).catch((err) => console.log(err))
+    if (createPropertyValidation()) {
+      fetch("http://192.168.1.24:3000/create-property", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: propertyName,
+          address: address,
+          type: type,
+          furniture: furniture,
+          bedroom: bedroom,
+          price: monthlyPrice,
+          reporter: reporter,
+          note: note
+        })
+      }).then(res => res.json())
+        .then(data => {
+          Alert.alert(`${data.name} is created successfully`)
+          navigation.navigate("List")
+        }).catch((err) => console.log(err))
+    }
   }
 
   const _updateData = () => {
@@ -89,20 +130,22 @@ const CreateProperty = ({ navigation, route }) => {
       <View style={styles.container}>
         <TextInput
           label="Property name"
-          style={styles.input}
+          style={styles.validateInput}
           placeholder="Enter property name here"
           mode="outlined"
           value={propertyName}
           onChangeText={text => setPropertyName(text)}
         />
+        <Text style={styles.errMessage}>{propertyNameError}</Text>
         <TextInput
           label="Property address"
-          style={styles.input}
+          style={styles.validateInput}
           placeholder="Enter detailed address here"
           mode="outlined"
           value={address}
           onChangeText={text => setAddress(text)}
         />
+        <Text style={styles.errMessage}>{addressError}</Text>
         <Picker
           accessibilityValue={type}
           selectedValue={type}
@@ -110,7 +153,7 @@ const CreateProperty = ({ navigation, route }) => {
           mode="dropdown"
           dropdownIconColor="purple"
           dropdownIconRippleColor="purple"
-          style={styles.picker}
+          style={styles.validatePicker}
         >
           <Picker.Item label="Select type" value="" />
           <Picker.Item label="Apartment" value="Apartment" />
@@ -118,6 +161,7 @@ const CreateProperty = ({ navigation, route }) => {
           <Picker.Item label="Penthouse" value="Penthouse" />
           <Picker.Item label="Villa" value="Villa" />
         </Picker>
+        <Text style={styles.errMessage}>{typeError}</Text>
         <Picker
           accessibilityValue={furniture}
           selectedValue={furniture}
@@ -134,46 +178,63 @@ const CreateProperty = ({ navigation, route }) => {
         </Picker>
         <TextInput
           label="Number of bedrooms"
-          style={styles.input}
+          style={styles.validateInput}
           placeholder="Enter the number of bedrooms here"
           mode="outlined"
           value={bedroom.toString()}
           onChangeText={text => setBedroom(text)}
         />
+        <Text style={styles.errMessage}>{bedroomError}</Text>
         <TextInput
           label="Monthly price"
-          style={styles.input}
+          style={styles.validateInput}
           placeholder="Enter monthly price here"
           mode="outlined"
           value={monthlyPrice.toString()}
           onChangeText={text => setMonthlyPrice(text)}
         />
+        <Text style={styles.errMessage}>{priceError}</Text>
         <TextInput
           label="Repoter"
-          style={styles.input}
+          style={styles.validateInput}
           placeholder="Enter name of reporter here"
           mode="outlined"
           value={reporter}
           onChangeText={text => setReporter(text)}
         />
+        <Text style={styles.errMessage}>{reporterError}</Text>
         <TextInput
           label="Note"
           style={styles.input}
-          placeholder="Enter a not here"
+          placeholder="Enter a note here"
           mode="outlined"
           value={note}
           onChangeText={text => setNote(text)}
         />
 
         {route.params
-          ? <Button
-            icon="content-save"
-            mode="contained"
-            style={styles.input}
-            onPress={() => _updateData()}
-          >
-            Update
-          </Button>
+          ? (
+            <View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
+              <Button
+                icon="content-save"
+                mode="contained"
+                style={styles.input}
+                onPress={() => _updateData()}
+              >
+                Update
+              </Button>
+              <Button
+                icon="cancel"
+                mode="contained"
+                style={styles.input}
+                onPress={() => {
+                  navigation.goBack()
+                }}
+              >
+                Cancel
+              </Button>
+            </View>
+          )
           : <Button
             icon="content-save"
             mode="contained"
@@ -183,7 +244,6 @@ const CreateProperty = ({ navigation, route }) => {
             Save
           </Button>
         }
-
       </View>
     </ScrollView>
   )
@@ -193,12 +253,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  validateInput: {
+    marginHorizontal: 6,
+    marginBottom: 9
+  },
   input: {
     marginHorizontal: 6,
     marginBottom: 18
   },
+  validatePicker: {
+    marginBottom: 9
+  },
   picker: {
     marginBottom: 18
+  },
+  errMessage: {
+    fontSize: 13,
+    color: 'red',
+    fontWeight: 'bold',
+    marginLeft: 6,
+
   }
 })
 

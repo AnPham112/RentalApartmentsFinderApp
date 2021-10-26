@@ -12,10 +12,12 @@ exports.createProperty = (req, res) => {
     reporter,
     note
   })
-  property.save((error, property) => {
-    if (error) return res.status(400).json({ error })
-    if (property) return res.status(201).json({ property })
-  })
+  property.save()
+    .then(data => {
+      res.send(data)
+    }).catch((err) => {
+      console.log(err)
+    })
 }
 
 exports.deleteProperty = (req, res) => {
@@ -47,8 +49,9 @@ exports.updateProperty = (req, res) => {
 
 exports.getList = (req, res) => {
   Property.find({})
-    .exec((error, properties) => {
-      if (error) return res.status(400).json({ error })
-      if (properties) return res.status(200).json({ properties })
+    .then(data => {
+      res.send(data)
+    }).catch((err) => {
+      console.log(err)
     })
 }

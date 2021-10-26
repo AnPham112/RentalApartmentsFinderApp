@@ -2,17 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { Card, FAB, Title } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useDispatch, useSelector } from 'react-redux';
 
 const PropertyList = ({ navigation }) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { data, loading } = useSelector((state) => {
+    return state
+  });
 
   const fetchData = () => {
     fetch('http://192.168.1.24:3000/')
       .then(res => res.json())
       .then(results => {
-        setData(results)
-        setLoading(false)
+        dispatch({ type: "ADD_DATA", payload: results })
+        dispatch({ type: "SET_LOADING", payload: false })
       })
   }
 
@@ -49,7 +52,7 @@ const PropertyList = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={data.properties}
+        data={data}
         renderItem={({ item }) => {
           return renderPropertyList(item)
         }}
@@ -115,8 +118,7 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-  },
-
+  }
 })
 
 export default PropertyList;

@@ -8,7 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { DataTable } from 'react-native-paper';
 
 const Profile = (props) => {
-  const { _id, name, address, type, furniture, bedroom, price, reporter, note } = props.route.params.item
+  const { _id, name, address, type, furniture, bedroom, price, reporter, note, createdAt } = props.route.params.item
   const _deleteProperty = () => {
     fetch('http://192.168.1.24:3000/delete', {
       method: 'POST',
@@ -102,6 +102,14 @@ const Profile = (props) => {
             </Text>
           </DataTable.Cell>
         </DataTable.Row>
+        <DataTable.Row>
+          <DataTable.Cell><MaterialCommunityIcons name='clock-time-four-outline' size={20} /></DataTable.Cell>
+          <DataTable.Cell style={{ flex: 3 }}>
+            <Text style={{ fontSize: 15 }}>
+              {createdAt}
+            </Text>
+          </DataTable.Cell>
+        </DataTable.Row>
       </DataTable>
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 16 }}>
         <Button
@@ -129,17 +137,6 @@ const styles = StyleSheet.create({
   title: {
     marginVertical: 8,
     fontSize: 25
-  },
-  card: {
-    margin: 6,
-    padding: 10
-  },
-  viewCard: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  text: {
-    color: '#000'
   }
 })
 
