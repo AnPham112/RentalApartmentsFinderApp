@@ -7,7 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DataTable } from 'react-native-paper';
 
-const Profile = (props) => {
+const Profile = (props, { navigation }) => {
   const { _id, name, address, type, furniture, bedroom, price, reporter, note, createdAt } = props.route.params.item
   const _deleteProperty = () => {
     fetch('http://192.168.1.24:3000/delete', {
@@ -20,7 +20,8 @@ const Profile = (props) => {
       })
     }).then(res => res.json())
       .then(deleteProp => {
-        Alert.alert(`${deleteProp.name} deleted successfully`)
+        Alert.alert(`${deleteProp.name} deleted successfully`);
+        props.navigation.navigate('List');
       }).catch(err => {
         console.log(err);
       })
@@ -35,7 +36,9 @@ const Profile = (props) => {
           text: "Cancel",
           style: "cancel"
         },
-        { text: "OK", onPress: () => _deleteProperty() }
+        {
+          text: "OK", onPress: () => _deleteProperty()
+        }
       ]
     );
   }

@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
-import { Card, FAB, Title } from 'react-native-paper';
+import { Card, FAB, Title, TextInput } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useDispatch, useSelector } from 'react-redux';
 
 const PropertyList = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const { data, loading } = useSelector((state) => {
-    return state
-  });
+  const [data, setData] = useState([]);
+  const [fullData, setFullData] = useState([]);
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const fetchData = () => {
     fetch('http://192.168.1.24:3000/')
       .then(res => res.json())
       .then(results => {
-        dispatch({ type: "ADD_DATA", payload: results })
-        dispatch({ type: "SET_LOADING", payload: false })
+        setData(results);
+        setFullData(results);
+        setLoading(false);
       })
   }
 
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [data])
 
   const renderPropertyList = (item) => {
@@ -40,7 +40,7 @@ const PropertyList = ({ navigation }) => {
             </View>
             <View style={styles.infoContainer}>
               <FontAwesome name='tag' size={23} color='#000' style={styles.iconStyle} />
-              <Text>{item.price}</Text>
+              <Text>${item.price}</Text>
             </View>
           </View>
         </View>
@@ -48,15 +48,39 @@ const PropertyList = ({ navigation }) => {
     )
   }
 
+  const handleSearch = (text) => {
+    if (text) {
+      const newData = fullData.filter((item) => {
+        const itemData = item.name
+          ? item.name.toUpperCase()
+          : ''.toUpperCase()
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1
+      });
+      setData(newData);
+      setSearch(text);
+    } else {
+      setData(fullData);
+      setSearch(text);
+    }
+  };
 
   return (
     <View style={styles.container}>
+      <TextInput
+        autoCapitalize='none'
+        autoCorrect={false}
+        style={styles.searchInput}
+        placeholder="Search here"
+        value={search}
+        onChangeText={(text) => handleSearch(text)}
+      />
       <FlatList
         data={data}
+        keyExtractor={item => item._id}
         renderItem={({ item }) => {
           return renderPropertyList(item)
         }}
-        keyExtractor={item => item._id}
         onRefresh={() => fetchData()}
         refreshing={loading}
       />
@@ -118,6 +142,13 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
+  },
+  searchInput: {
+    marginTop: 8,
+    marginHorizontal: 10,
+    marginBottom: 8,
+    backgroundColor: '#fff',
+    elevation: 10
   }
 })
 
