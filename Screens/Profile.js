@@ -1,11 +1,12 @@
 import React from 'react';
 import { Text, View, StyleSheet, Alert } from 'react-native';
 import { Button, Title } from 'react-native-paper';
+import { DataTable } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { DataTable } from 'react-native-paper';
+import moment from 'moment';
 
 const Profile = (props) => {
   const { _id, name, address, type, furniture, bedroom, price, reporter, note, createdAt } = props.route.params.item
@@ -109,7 +110,7 @@ const Profile = (props) => {
           <DataTable.Cell><MaterialCommunityIcons name='clock-time-four-outline' size={20} /></DataTable.Cell>
           <DataTable.Cell style={{ flex: 3 }}>
             <Text style={{ fontSize: 15 }}>
-              {createdAt}
+              {moment(createdAt).format("MMM Do YYYY")}
             </Text>
           </DataTable.Cell>
         </DataTable.Row>
