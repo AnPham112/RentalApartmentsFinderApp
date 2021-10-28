@@ -7,7 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { DataTable } from 'react-native-paper';
 
-const Profile = (props, { navigation }) => {
+const Profile = (props) => {
   const { _id, name, address, type, furniture, bedroom, price, reporter, note, createdAt } = props.route.params.item
   const _deleteProperty = () => {
     fetch('http://192.168.1.24:3000/delete', {

@@ -4,12 +4,8 @@ import { Button, TextInput } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useForm, Controller } from "react-hook-form";
 
-
-
 const CreateProperty = ({ navigation, route }) => {
-  const { control, handleSubmit, formState: { errors }, setValue, getValues, watch } = useForm();
-
-  const watchShowType = watch("type", false);
+  const { control, handleSubmit, formState: { errors } } = useForm();
 
   const getDetails = (category) => {
     if (route.params) {
@@ -58,47 +54,6 @@ const CreateProperty = ({ navigation, route }) => {
   useEffect(() => {
     handleSelected()
   }, [type]);
-
-  // const [propertyNameError, setPropertyNameError] = useState('');
-  // const [addressError, setAddressError] = useState('');
-
-  // const [bedroomError, setBedroomError] = useState('');
-  // const [priceError, setPriceError] = useState('');
-  // const [reporterError, setReporterError] = useState('');
-  // const [isValidPropertyName, setIsValidPropertyName] = useState(true);
-  // const [isValidAddress, setIsValidAddress] = useState(true);
-  // const [isValidType, setIsValidType] = useState(true);
-  // const [isValidBedroom, setIsValidBedroom] = useState(true);
-
-  // const [isValidReporter, setIsValidReporter] = useState(true);
-
-  // const createPropertyValidation = () => {
-  //   if (propertyName.length == 0) {
-  //     setPropertyNameError("Property name is required")
-  //     return false
-  //   }
-  //   if (address == "") {
-  //     setAddressError("Property address is required")
-  //     return false
-  //   }
-  //   if (type == "") {
-  //     setTypeError("Type is required")
-  //     return false
-  //   }
-  //   if (bedroom == "") {
-  //     setBedroomError("The number of bedrooms is required")
-  //     return false
-  //   }
-  //   if (monthlyPrice == "") {
-  //     setPriceError("Monthly price is required")
-  //     return false
-  //   }
-  //   if (reporter == "") {
-  //     setReporterError("Reporter name is required")
-  //     return false
-  //   }
-  //   return true
-  // }
 
   const _submitData = (data) => {
     if (isSelected) {
@@ -206,29 +161,6 @@ const CreateProperty = ({ navigation, route }) => {
           defaultValue={address}
         />
         {errors.address && <Text style={styles.errMessage}>{errors.address.message}</Text>}
-
-        {/* <TextInput
-          label="Property name"
-          style={styles.validateInput}
-          placeholder="Enter property name here"
-          mode="outlined"
-          value={propertyName}
-          onChangeText={text => setPropertyName(text)}
-          accessibilityValue={propertyName}
-        /> */}
-        {/* {propertyNameError ? <View>
-          <Text style={styles.errMessage}>{propertyNameError}</Text>
-        </View> : null} */}
-        {/* <Text style={styles.errMessage}>{propertyNameError}</Text> */}
-        {/* <TextInput
-          label="Property address"
-          style={styles.validateInput}
-          placeholder="Enter detailed address here"
-          mode="outlined"
-          value={address}
-          onChangeText={text => setAddress(text)}
-        /> */}
-        {/* <Text style={styles.errMessage}>{addressError}</Text> */}
         <Picker
           accessibilityValue={type}
           selectedValue={type}
@@ -236,7 +168,7 @@ const CreateProperty = ({ navigation, route }) => {
           mode="dropdown"
           dropdownIconColor="purple"
           dropdownIconRippleColor="purple"
-          style={styles.validatePicker}
+          style={styles.picker}
         >
           <Picker.Item label="Select type" value="" />
           <Picker.Item label="Apartment" value="Apartment" />
@@ -259,7 +191,6 @@ const CreateProperty = ({ navigation, route }) => {
           <Picker.Item label="Half furnished" value="Half furnished" />
           <Picker.Item label="Furnished" value="Furnished" />
         </Picker>
-
         <Controller
           control={control}
           rules={{
@@ -284,17 +215,6 @@ const CreateProperty = ({ navigation, route }) => {
           defaultValue={bedroom.toString()}
         />
         {errors.bedroom && <Text style={styles.errMessage}>{errors.bedroom.message}</Text>}
-
-        {/* <TextInput
-          label="Number of bedrooms"
-          style={styles.validateInput}
-          placeholder="Enter the number of bedrooms here"
-          mode="outlined"
-          value={bedroom.toString()}
-          onChangeText={text => setBedroom(text)}
-        /> */}
-        {/* <Text style={styles.errMessage}>{bedroomError}</Text> */}
-
         <Controller
           control={control}
           rules={{
@@ -319,17 +239,6 @@ const CreateProperty = ({ navigation, route }) => {
           defaultValue={monthlyPrice.toString()}
         />
         {errors.monthlyPrice && <Text style={styles.errMessage}>{errors.monthlyPrice.message}</Text>}
-
-        {/* <TextInput
-          label="Monthly price"
-          style={styles.validateInput}
-          placeholder="Enter monthly price here"
-          mode="outlined"
-          value={monthlyPrice.toString()}
-          onChangeText={text => setMonthlyPrice(text)}
-        /> */}
-        {/* <Text style={styles.errMessage}>{priceError}</Text> */}
-
         <Controller
           control={control}
           rules={{
@@ -353,8 +262,6 @@ const CreateProperty = ({ navigation, route }) => {
           defaultValue={reporter}
         />
         {errors.reporter && <Text style={styles.errMessage}>{errors.reporter.message}</Text>}
-
-
         <TextInput
           label="Note"
           style={styles.input}
@@ -363,7 +270,6 @@ const CreateProperty = ({ navigation, route }) => {
           value={note}
           onChangeText={text => setNote(text)}
         />
-
         {route.params
           ? (<View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
             <Button
@@ -393,15 +299,6 @@ const CreateProperty = ({ navigation, route }) => {
             onPress={handleSubmit(_submitData)}>
             Create
           </Button>)
-          // : (<Button
-          //   disabled
-          //   icon="content-save"
-          //   mode="contained"
-          //   style={styles.input}
-          //   onPress={handleSubmit(_submitData)}
-          // >
-          //   Save
-          // </Button>)
         }
       </View>
     </ScrollView >
@@ -412,27 +309,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  validateInput: {
-    marginHorizontal: 6,
-    marginBottom: 9
-  },
   input: {
     marginHorizontal: 6,
     marginBottom: 8
   },
-  validatePicker: {
-    marginBottom: 9
-  },
   picker: {
-    marginBottom: 18
+    marginBottom: 8
   },
   errMessage: {
     fontSize: 13,
     color: 'red',
     fontWeight: 'bold',
     marginLeft: 6,
-    marginBottom: 8,
-    marginTop: 0
+    marginBottom: 8
   }
 })
 

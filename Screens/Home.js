@@ -24,7 +24,7 @@ const Home = ({ navigation }) => {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.wrap}>
         <ScrollView
           onScroll={({ nativeEvent }) => onchange(nativeEvent)}

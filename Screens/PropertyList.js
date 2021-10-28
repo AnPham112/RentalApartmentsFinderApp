@@ -21,7 +21,7 @@ const PropertyList = ({ navigation }) => {
 
   useEffect(() => {
     fetchData();
-  }, [data])
+  }, [])
 
   const renderPropertyList = (item) => {
     return (
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 8,
     backgroundColor: '#fff',
-    elevation: 10
+    elevation: 11
   }
 })
 
