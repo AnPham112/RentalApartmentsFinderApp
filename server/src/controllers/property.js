@@ -13,10 +13,12 @@ exports.createProperty = (req, res) => {
     reporter,
     note
   })
-  property.save((error, property) => {
-    if (error) return res.status(400).json({ error })
-    if (property) return res.status(201).json({ property })
-  })
+  property.save()
+    .then(data => {
+      res.send(data)
+    }).catch(err => {
+      console.log(err)
+    })
 }
 
 exports.deleteProperty = (req, res) => {

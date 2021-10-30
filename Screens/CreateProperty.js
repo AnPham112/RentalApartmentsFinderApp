@@ -82,9 +82,6 @@ const CreateProperty = ({ navigation, route }) => {
   }
 
   const _updateData = (data) => {
-    console.log(data);
-    console.log(type);
-    console.log(isSelected)
     if (isSelected) {
       fetch("http://192.168.1.24:3000/update", {
         method: 'POST',
@@ -108,7 +105,6 @@ const CreateProperty = ({ navigation, route }) => {
           navigation.navigate("List")
         }).catch((err) => console.log(err))
     }
-
   }
 
   return (
