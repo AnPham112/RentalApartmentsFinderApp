@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './Screens/Home'
 import PropertyList from './Screens/PropertyList';
 import CreateProperty from './Screens/CreateProperty';
-import Profile from './Screens/Profile';
+import Detail from './Screens/Detail';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +22,7 @@ const App = () => {
         }} />
         <Stack.Screen name="Create" component={CreateProperty} />
         <Stack.Screen name="List" component={PropertyList} />
-        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Detail" component={Detail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

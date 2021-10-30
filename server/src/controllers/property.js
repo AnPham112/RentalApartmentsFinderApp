@@ -1,4 +1,5 @@
 const Property = require('../models/property');
+const Note = require('../models/note');
 
 exports.createProperty = (req, res) => {
   const { name, address, type, furniture, bedroom, price, reporter, note } = req.body;
@@ -12,12 +13,10 @@ exports.createProperty = (req, res) => {
     reporter,
     note
   })
-  property.save()
-    .then(data => {
-      res.send(data)
-    }).catch((err) => {
-      console.log(err)
-    })
+  property.save((error, property) => {
+    if (error) return res.status(400).json({ error })
+    if (property) return res.status(201).json({ property })
+  })
 }
 
 exports.deleteProperty = (req, res) => {
@@ -49,9 +48,25 @@ exports.updateProperty = (req, res) => {
 
 exports.getList = (req, res) => {
   Property.find({})
-    .then(data => {
-      res.send(data)
-    }).catch((err) => {
-      console.log(err)
+    .exec((error, properties) => {
+      if (error) return res.status(400).json({ error })
+      if (properties) return res.status(200).json({ properties })
     })
+}
+
+exports.createNote = async (req, res) => {
+  const { content } = req.body;
+  const newNote = new Note({ content })
+  const property = await Property.findById(req.body.id)
+  newNote.owner = property
+  await newNote.save()
+  property.notes.push(newNote._id)
+  await property.save()
+  res.status(201).json({ note: newNote })
+}
+
+exports.getNotes = async (req, res) => {
+  const property = await Property.findById(req.body.id)
+    .populate('notes');
+  res.status(200).json({ notes: property.notes })
 }

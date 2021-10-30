@@ -13,8 +13,8 @@ const PropertyList = ({ navigation }) => {
     fetch('http://192.168.1.24:3000/')
       .then(res => res.json())
       .then(results => {
-        setData(results);
-        setFullData(results);
+        setData(results.properties);
+        setFullData(results.properties);
         setLoading(false);
       })
   }
@@ -25,7 +25,7 @@ const PropertyList = ({ navigation }) => {
 
   const renderPropertyList = (item) => {
     return (
-      <Card style={styles.cardStyle} onPress={() => navigation.navigate('Profile', { item })}>
+      <Card style={styles.cardStyle} onPress={() => navigation.navigate('Detail', { item })}>
         <View style={styles.cardViews}>
           <Title style={styles.PropertyName}>{item.name}</Title>
           <Text style={styles.Address}>{item.address}</Text>

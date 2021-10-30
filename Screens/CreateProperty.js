@@ -45,7 +45,7 @@ const CreateProperty = ({ navigation, route }) => {
   const handleSelected = () => {
     if (type.trim().length == 0) {
       setIsSelected(false)
-      setTypeError('Type is required')
+      setTypeError('Property type is required')
     } else {
       setIsSelected(true)
     }
@@ -55,7 +55,7 @@ const CreateProperty = ({ navigation, route }) => {
     handleSelected()
   }, [type]);
 
-  const _submitData = (data) => {
+  const _createProperty = (data) => {
     if (isSelected) {
       fetch("http://192.168.1.24:3000/create-property", {
         method: 'POST',
@@ -170,7 +170,7 @@ const CreateProperty = ({ navigation, route }) => {
           dropdownIconRippleColor="purple"
           style={styles.picker}
         >
-          <Picker.Item label="Select type" value="" />
+          <Picker.Item label="Select property type" value="" />
           <Picker.Item label="Apartment" value="Apartment" />
           <Picker.Item label="House" value="House" />
           <Picker.Item label="Penthouse" value="Penthouse" />
@@ -186,7 +186,7 @@ const CreateProperty = ({ navigation, route }) => {
           dropdownIconRippleColor="purple"
           style={styles.picker}
         >
-          <Picker.Item label="Select furniture" value="" />
+          <Picker.Item label="Select furniture type" value="" />
           <Picker.Item label="Unfurnished" value="Unfurnished" />
           <Picker.Item label="Half furnished" value="Half furnished" />
           <Picker.Item label="Furnished" value="Furnished" />
@@ -296,7 +296,7 @@ const CreateProperty = ({ navigation, route }) => {
             icon="plus"
             mode="contained"
             style={styles.input}
-            onPress={handleSubmit(_submitData)}>
+            onPress={handleSubmit(_createProperty)}>
             Create
           </Button>)
         }

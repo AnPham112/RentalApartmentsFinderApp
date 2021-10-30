@@ -9,7 +9,11 @@ const PropertySchema = new Schema({
   bedroom: Number,
   price: Number,
   reporter: String,
-  note: String
+  note: String,
+  notes: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Note'
+  }]
 }, { timestamps: true })
 
 module.exports = mongoose.model('Property', PropertySchema);
