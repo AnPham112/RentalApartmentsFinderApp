@@ -19,10 +19,19 @@ const App = () => {
       >
         <Stack.Screen name="Home" component={Home} options={{
           title: 'HappyHouse',
+        }}
+        />
+        <Stack.Screen name="Create" component={CreateProperty} options={{
+          title: 'Create Property',
+        }}
+        />
+        <Stack.Screen name="List" component={PropertyList} options={{
+          title: 'Property List',
+        }}
+        />
+        <Stack.Screen name="Detail" component={Detail} options={{
+          title: 'Property Detail',
         }} />
-        <Stack.Screen name="Create" component={CreateProperty} />
-        <Stack.Screen name="List" component={PropertyList} />
-        <Stack.Screen name="Detail" component={Detail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

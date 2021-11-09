@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
-import { Card, FAB, Title, TextInput } from 'react-native-paper';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Card, FAB, Title } from 'react-native-paper';
+import LinearGradient from 'react-native-linear-gradient';
+import Search from '../components/Search';
+import InfoIcon from '../components/InforIcon';
 
 const PropertyList = ({ navigation }) => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [fullData, setFullData] = useState([]);
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(true);
 
   const fetchData = () => {
     fetch('http://192.168.1.24:3000/')
       .then(res => res.json())
       .then(results => {
-        setData(results.properties);
-        setFullData(results.properties);
+        setData(results);
+        setFullData(results);
         setLoading(false);
       })
   }
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, []);
 
   const renderPropertyList = (item) => {
     return (
@@ -30,18 +32,10 @@ const PropertyList = ({ navigation }) => {
           <Title style={styles.PropertyName}>{item.name}</Title>
           <Text style={styles.Address}>{item.address}</Text>
           <View style={styles.row}>
-            <View style={styles.infoContainer}>
-              <FontAwesome name='home' size={25} color='#000' style={styles.iconStyle} />
-              <Text>{item.type}</Text>
-            </View>
-            <View style={styles.infoContainer}>
-              <FontAwesome name='bed' size={25} color='#000' style={styles.iconStyle} />
-              <Text>{item.bedroom}</Text>
-            </View>
-            <View style={styles.infoContainer}>
-              <FontAwesome name='tag' size={23} color='#000' style={styles.iconStyle} />
-              <Text>${item.price}</Text>
-            </View>
+            <InfoIcon name={'home'} size={20} color={'#000'}>{item.type}</InfoIcon>
+            <InfoIcon name={'bed'} size={20} color={'#000'}>{item.type}</InfoIcon>
+            <InfoIcon name={'tag'} size={20} color={'#000'}>{item.type}</InfoIcon>
+            <InfoIcon name={'user-cog'} size={20} color={'#000'}>{item.reporter}</InfoIcon>
           </View>
         </View>
       </Card>
@@ -66,33 +60,35 @@ const PropertyList = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        autoCapitalize='none'
-        autoCorrect={false}
-        style={styles.searchInput}
-        placeholder="Search here"
-        value={search}
-        onChangeText={(text) => handleSearch(text)}
-      />
-      <FlatList
-        data={data}
-        keyExtractor={item => item._id}
-        renderItem={({ item }) => {
-          return renderPropertyList(item)
-        }}
-        onRefresh={() => fetchData()}
-        refreshing={loading}
-      />
-
-      <FAB
-        style={styles.fab}
-        small={false}
-        icon="plus"
-        theme={{ colors: { accent: '#8000FF' } }}
-        onPress={() => navigation.navigate('Create')}
-      />
-    </View>
+    <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#ffbe5d', '#ffd75d', '#fcf067']} style={styles.linearGradient}>
+      <View style={styles.container}>
+        <Search
+          name={'search'}
+          size={20}
+          autoCapitalize={'none'}
+          autoCorrect={false}
+          placeholder={'Search property name here'}
+          value={search}
+          onChangeText={(text) => handleSearch(text)}
+        />
+        <FlatList
+          data={data}
+          renderItem={({ item }) => {
+            return renderPropertyList(item)
+          }}
+          keyExtractor={item => item._id}
+          onRefresh={() => fetchData()}
+          refreshing={loading}
+        />
+        <FAB
+          style={styles.fab}
+          small={false}
+          icon="plus"
+          theme={{ colors: { accent: '#8000FF' } }}
+          onPress={() => navigation.navigate('Create')}
+        />
+      </View>
+    </LinearGradient >
   )
 }
 
@@ -100,6 +96,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
+  },
+  linearGradient: {
+    flex: 1
   },
   cardStyle: {
     marginTop: 4,
@@ -116,15 +115,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     marginVertical: 3
-  },
-  infoContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginRight: 16
-  },
-  iconStyle: {
-    marginRight: 5
   },
   PropertyName: {
     fontSize: 18,
@@ -143,12 +133,27 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  searchInput: {
+  searchSection: {
     marginTop: 8,
     marginHorizontal: 10,
     marginBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#fff',
-    elevation: 11
+    elevation: 15
+  },
+  searchIcon: {
+    padding: 8,
+  },
+  searchInput: {
+    flex: 1,
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,
+    backgroundColor: '#fff',
+    color: '#424242',
   }
 })
 

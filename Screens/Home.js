@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, Text, Image, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
+import LinearGradient from 'react-native-linear-gradient';
 
 const images = [
   'https://cdn.pixabay.com/photo/2016/11/29/03/53/house-1867187_960_720.jpg',
@@ -24,54 +25,59 @@ const Home = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.wrap}>
-        <ScrollView
-          onScroll={({ nativeEvent }) => onchange(nativeEvent)}
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          horizontal
-          style={styles.wrap}
-        >
-          {
-            images.map((img, index) => (
-              <Image
-                key={index}
-                resizeMode='stretch'
-                style={styles.wrap}
-                source={{ uri: img }}
-              />
-            ))
-          }
-        </ScrollView>
-        <View style={styles.indicatorContainer}>
-          {
-            images.map((img, index) => (
-              <View key={index} style={imgActive == index ? styles.indicatorActive : styles.indicator}></View>
-            ))
-          }
+    <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#ffbe5d', '#ffd75d', '#fcf067']} style={styles.linearGradient}>
+      <View style={styles.container}>
+        <View style={styles.wrap}>
+          <ScrollView
+            onScroll={({ nativeEvent }) => onchange(nativeEvent)}
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled
+            horizontal
+            style={styles.wrap}
+          >
+            {
+              images.map((img, index) => (
+                <Image
+                  key={index}
+                  resizeMode='stretch'
+                  style={styles.wrap}
+                  source={{ uri: img }}
+                />
+              ))
+            }
+          </ScrollView>
+          <View style={styles.indicatorContainer}>
+            {
+              images.map((img, index) => (
+                <View key={index} style={imgActive == index ? styles.indicatorActive : styles.indicator}></View>
+              ))
+            }
+          </View>
+        </View>
+
+        <View style={{ alignItems: 'center' }}>
+          <Text style={styles.text}>Welcome to</Text>
+          <Text style={styles.logo}>HappyHouse</Text>
+          <Text style={styles.boldText}>Find your sweet home</Text>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => {
+              navigation.replace('List')
+            }}
+          >
+            Get started
+          </Button>
         </View>
       </View>
-
-      <View style={{ alignItems: 'center' }}>
-        <Text style={{ fontSize: 19, marginBottom: 8 }}>Welcome to</Text>
-        <Text style={{ fontFamily: 'RampartOne-Regular', fontSize: 30, color: '#000', marginBottom: 15 }}>HappyHouse</Text>
-        <Text style={{ fontSize: 20, marginBottom: 8 }}>Find your sweet home</Text>
-        <Button
-          mode="contained"
-          onPress={() => {
-            navigation.replace('List')
-          }}
-        >
-          Get started
-        </Button>
-      </View>
-
-    </View>
+    </LinearGradient>
   )
 }
 
 const styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1
+  },
   container: {
     flex: 1
   },
@@ -98,6 +104,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
     marginHorizontal: 5,
     marginVertical: 3
+  },
+  logo: {
+    fontFamily: 'RampartOne-Regular',
+    fontSize: 32,
+    color: '#b027ff',
+    marginBottom: 15
+  },
+  text: {
+    color: '#2E2E2E',
+    fontSize: 20
+  },
+  boldText: {
+    color: '#2E2E2E',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  button: {
+    marginTop: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 6
   }
 });
 

@@ -7,11 +7,12 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
+import LinearGradient from 'react-native-linear-gradient';
+import ContentCell from '../components/ContentCell';
 
 const Detail = (props) => {
   const [propertyNote, setPropertyNote] = useState('');
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { _id, name, address, type, furniture, bedroom, price, reporter, note, createdAt } = props.route.params.item
   const _deleteProperty = () => {
     fetch('http://192.168.1.24:3000/delete', {
@@ -23,8 +24,8 @@ const Detail = (props) => {
         id: _id
       })
     }).then(res => res.json())
-      .then(deleteProp => {
-        Alert.alert(`${deleteProp.name} deleted successfully`);
+      .then(result => {
+        Alert.alert("Property is removed successfully");
         props.navigation.navigate('List');
       }).catch(err => {
         console.log(err);
@@ -56,10 +57,7 @@ const Detail = (props) => {
         id: _id
       })
     }).then(res => res.json())
-      .then(results => {
-        setData(results.notes)
-        setLoading(false);
-      })
+      .then(results => setData(results.notes))
   }
 
   useEffect(() => {
@@ -96,121 +94,84 @@ const Detail = (props) => {
   }
 
   return (
-    <ScrollView nestedScrollEnabled={true}>
-      <View style={styles.container}>
-        <View style={{ alignItems: 'center' }}>
-          <Title style={styles.title}>{name}</Title>
-        </View>
-        <DataTable>
-          <DataTable.Row>
-            <DataTable.Cell><Entypo name="location" size={20} /></DataTable.Cell>
-            <DataTable.Cell style={{ flex: 3 }}>
-              <Text style={{ fontSize: 15 }}>
-                {address}
-              </Text>
-            </DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell><FontAwesome name='home' size={20} /></DataTable.Cell>
-            <DataTable.Cell style={{ flex: 3 }}>
-              <Text style={{ fontSize: 15 }}>
-                {type}
-              </Text>
-            </DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell><FontAwesome name='bed' size={20} /></DataTable.Cell>
-            <DataTable.Cell style={{ flex: 3 }}>
-              <Text style={{ fontSize: 15 }}>
-                {bedroom}
-              </Text>
-            </DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell><FontAwesome name='tag' size={20} /></DataTable.Cell>
-            <DataTable.Cell style={{ flex: 3 }}>
-              <Text style={{ fontSize: 15 }}>
-                ${price}
-              </Text>
-            </DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell><MaterialCommunityIcons name='desk-lamp' size={22} /></DataTable.Cell>
-            <DataTable.Cell style={{ flex: 3 }}>
-              <Text style={{ fontSize: 15 }}>
-                {furniture}
-              </Text>
-            </DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell><FontAwesome5 name='user-cog' size={20} /></DataTable.Cell>
-            <DataTable.Cell style={{ flex: 3 }}>
-              <Text style={{ fontSize: 15 }}>
-                {reporter}
-              </Text>
-            </DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell><MaterialCommunityIcons name='clock-time-four-outline' size={20} /></DataTable.Cell>
-            <DataTable.Cell style={{ flex: 3 }}>
-              <Text style={{ fontSize: 15 }}>
-                {moment(createdAt).format('MMM Do YYYY, h:mm:ss a')}
-              </Text>
-            </DataTable.Cell>
-          </DataTable.Row>
-        </DataTable>
+    <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#ffbe5d', '#ffd75d', '#fcf067']} style={styles.linearGradient}>
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={{ alignItems: 'center' }}>
+            <Title style={styles.title}>{name}</Title>
+          </View>
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell><Entypo name="location" size={20} /></DataTable.Cell>
+              <ContentCell>{address}</ContentCell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell><FontAwesome name='home' size={20} /></DataTable.Cell>
+              <ContentCell>{type}</ContentCell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell><FontAwesome name='bed' size={20} /></DataTable.Cell>
+              <ContentCell>{bedroom}</ContentCell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell><FontAwesome name='tag' size={20} /></DataTable.Cell>
+              <ContentCell>${price}</ContentCell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell><MaterialCommunityIcons name='desk-lamp' size={22} /></DataTable.Cell>
+              <ContentCell>{furniture}</ContentCell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell><FontAwesome5 name='user-cog' size={20} /></DataTable.Cell>
+              <ContentCell>{reporter}</ContentCell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell><MaterialCommunityIcons name='clock-time-four-outline' size={20} /></DataTable.Cell>
+              <ContentCell>{moment(createdAt).format('MMM Do YYYY, h:mm:ss a')}</ContentCell>
+            </DataTable.Row>
+          </DataTable>
 
-        <View style={styles.row}>
-          <TextInput
-            label="Note"
-            placeholder="Enter note here"
-            mode="outlined"
-            style={styles.input}
-            value={propertyNote}
-            onChangeText={(text) => setPropertyNote(text)}
-          />
-          <Button
-            icon="plus"
-            mode="contained"
-            onPress={() => addNote()}
-          >Add</Button>
-        </View>
+          <View style={styles.row}>
+            <TextInput
+              label="Note"
+              placeholder="Enter note here"
+              mode="outlined"
+              style={styles.input}
+              value={propertyNote}
+              onChangeText={(text) => setPropertyNote(text)}
+            />
+            <Button
+              icon="plus"
+              mode="contained"
+              onPress={() => addNote()}
+            >Add</Button>
+          </View>
 
-        <View style={styles.cardStyle}>
-          <View style={styles.cardViews}>
-            <Text>{moment(createdAt).format('MMM Do YYYY, h:mm:ss a')}</Text>
-            <Text style={styles.note}>{note}</Text>
+          <View style={styles.cardStyle}>
+            <View style={styles.cardViews}>
+              <Text>{moment(createdAt).format('MMM Do YYYY, h:mm:ss a')}</Text>
+              <Text style={styles.note}>{note}</Text>
+            </View>
+          </View>
+          {renderNotes()}
+
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 16, marginBottom: 16 }}>
+            <Button
+              icon="file-document-edit-outline"
+              mode="contained"
+              onPress={() => props.navigation.navigate("Create",
+                { _id, name, address, type, furniture, bedroom, price, reporter, note }
+              )}
+            >
+              Edit
+            </Button>
+            <Button icon="delete" mode="contained" onPress={() => deleteConfirmationAlert()}>
+              Delete
+            </Button>
           </View>
         </View>
-
-        {renderNotes()}
-
-        {/* <FlatList
-          data={data}
-          keyExtractor={item => item._id}
-          renderItem={({ item }) => {
-            return renderNotes(item)
-          }}
-          onRefresh={() => getNotes()}
-          refreshing={loading}
-        /> */}
-
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 16, marginBottom: 16 }}>
-          <Button
-            icon="file-document-edit-outline"
-            mode="contained"
-            onPress={() => props.navigation.navigate("Create",
-              { _id, name, address, type, furniture, bedroom, price, reporter, note }
-            )}
-          >
-            Edit
-          </Button>
-          <Button icon="delete" mode="contained" onPress={() => deleteConfirmationAlert()}>
-            Delete
-          </Button>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </LinearGradient>
   )
 }
 

@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const PropertySchema = new Schema({
-  name: String,
+  name: {
+    type: String,
+    unique: true
+  },
   address: String,
   type: String,
   furniture: String,

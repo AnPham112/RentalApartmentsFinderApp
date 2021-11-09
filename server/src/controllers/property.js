@@ -50,9 +50,10 @@ exports.updateProperty = (req, res) => {
 
 exports.getList = (req, res) => {
   Property.find({})
-    .exec((error, properties) => {
-      if (error) return res.status(400).json({ error })
-      if (properties) return res.status(200).json({ properties })
+    .then((data) => {
+      res.send(data)
+    }).catch((err) => {
+      console.log(err)
     })
 }
 
