@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
+import Sound from 'react-native-sound';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const images = [
   'https://cdn.pixabay.com/photo/2016/11/29/03/53/house-1867187_960_720.jpg',
@@ -14,6 +16,7 @@ const HEIGHT = Dimensions.get('window').height;
 
 const Home = ({ navigation }) => {
   const [imgActive, setImgActive] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const onchange = (nativeEvent) => {
     if (nativeEvent) {
@@ -22,6 +25,25 @@ const Home = ({ navigation }) => {
         setImgActive(slide);
       }
     }
+  }
+
+  const sound = new Sound('doorbell.mp3', Sound.MAIN_BUNDLE, (error) => {
+    if (error) {
+      console.log('failed to load the sound', error);
+      return;
+    }
+  });
+
+  const playSound = () => {
+    setIsDisabled(true)
+    sound.play((success) => {
+      if (!success) {
+        console.log('Sound did not play')
+      }
+    })
+    setTimeout(() => {
+      setIsDisabled(false)
+    }, 2000);
   }
 
   return (
@@ -57,7 +79,12 @@ const Home = ({ navigation }) => {
 
         <View style={{ alignItems: 'center' }}>
           <Text style={styles.text}>Welcome to</Text>
-          <Text style={styles.logo}>HappyHouse</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.logo}>HappyHouse</Text>
+            <TouchableOpacity onPress={playSound} disabled={isDisabled}>
+              <View><FontAwesome name="bell" size={20} color='#000' /></View>
+            </TouchableOpacity>
+          </View>
           <Text style={styles.boldText}>Find your sweet home</Text>
           <Button
             style={styles.button}

@@ -18,6 +18,8 @@ target 'RentalApartmentsFinder' do
 
   pod 'react-native-blur', :path => '../node_modules/@react-native-community/blur'
 
+  pod 'RNSound', :path => '../node_modules/react-native-sound'
+
   target 'RentalApartmentsFinderTests' do
     inherit! :complete
     # Pods for testing
