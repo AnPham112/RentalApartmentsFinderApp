@@ -14,7 +14,7 @@ const Detail = (props) => {
   const [propertyNote, setPropertyNote] = useState('');
   const [data, setData] = useState([]);
   const { _id, name, address, type, furniture, bedroom, price, reporter, note, createdAt } = props.route.params.item
-  const _deleteProperty = () => {
+  const deleteProperty = () => {
     fetch('http://192.168.1.24:3000/delete', {
       method: 'POST',
       headers: {
@@ -74,7 +74,7 @@ const Detail = (props) => {
           style: "cancel"
         },
         {
-          text: "OK", onPress: () => _deleteProperty()
+          text: "OK", onPress: () => deleteProperty()
         }
       ]
     );

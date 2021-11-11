@@ -56,7 +56,7 @@ const CreateProperty = ({ navigation, route }) => {
     handleSelected()
   }, [type]);
 
-  const _createProperty = (data) => {
+  const createProperty = (data) => {
     if (isSelected) {
       fetch("http://192.168.1.24:3000/create-property", {
         method: 'POST',
@@ -82,7 +82,7 @@ const CreateProperty = ({ navigation, route }) => {
     }
   }
 
-  const _updateData = (data) => {
+  const updateData = (data) => {
     if (isSelected) {
       fetch("http://192.168.1.24:3000/update", {
         method: 'POST',
@@ -274,7 +274,7 @@ const CreateProperty = ({ navigation, route }) => {
                 icon="content-save"
                 mode="contained"
                 style={styles.input}
-                onPress={handleSubmit(_updateData)}
+                onPress={handleSubmit(updateData)}
               >
                 Update
               </Button>
@@ -294,7 +294,7 @@ const CreateProperty = ({ navigation, route }) => {
               icon="plus"
               mode="contained"
               style={styles.input}
-              onPress={handleSubmit(_createProperty)}>
+              onPress={handleSubmit(createProperty)}>
               Create
             </Button>)
           }

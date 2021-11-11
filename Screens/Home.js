@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Image, ScrollView, TouchableOpacity, Vibration } from 'react-native';
 import { Button } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import Sound from 'react-native-sound';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 const images = [
   'https://cdn.pixabay.com/photo/2016/11/29/03/53/house-1867187_960_720.jpg',
@@ -38,13 +39,17 @@ const Home = ({ navigation }) => {
     setIsDisabled(true)
     sound.play((success) => {
       if (!success) {
-        console.log('Sound did not play')
+        console.log('Sound does not play')
       }
     })
     setTimeout(() => {
       setIsDisabled(false)
-    }, 2000);
+    }, 1800);
   }
+
+  const startVibration = () => {
+    Vibration.vibrate(1000);
+  };
 
   return (
     <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#ffbe5d', '#ffd75d', '#fcf067']} style={styles.linearGradient}>
@@ -81,9 +86,21 @@ const Home = ({ navigation }) => {
           <Text style={styles.text}>Welcome to</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.logo}>HappyHouse</Text>
-            <TouchableOpacity onPress={playSound} disabled={isDisabled}>
-              <View><FontAwesome name="bell" size={20} color='#000' /></View>
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'column' }}>
+              <TouchableOpacity
+                onPress={playSound}
+                disabled={isDisabled}
+              >
+                <View>
+                  <FontAwesome name="bell" size={20} color='#000' />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={startVibration}
+              >
+                <View><MaterialIcons name="vibration" size={20} color='#000' /></View>
+              </TouchableOpacity>
+            </View>
           </View>
           <Text style={styles.boldText}>Find your sweet home</Text>
           <Button
