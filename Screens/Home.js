@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, Image, ScrollView, TouchableOpacity, Vibration } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Image, ScrollView, Modal } from 'react-native';
 import { Button } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
-import Sound from 'react-native-sound';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import NotificationAPIModal from '../components/NotificationAPIModal';
 
 const images = [
   'https://cdn.pixabay.com/photo/2016/11/29/03/53/house-1867187_960_720.jpg',
@@ -17,7 +15,7 @@ const HEIGHT = Dimensions.get('window').height;
 
 const Home = ({ navigation }) => {
   const [imgActive, setImgActive] = useState(0);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const onchange = (nativeEvent) => {
     if (nativeEvent) {
@@ -28,28 +26,9 @@ const Home = ({ navigation }) => {
     }
   }
 
-  const sound = new Sound('doorbell.mp3', Sound.MAIN_BUNDLE, (error) => {
-    if (error) {
-      console.log('failed to load the sound', error);
-      return;
-    }
-  });
-
-  const playSound = () => {
-    setIsDisabled(true)
-    sound.play((success) => {
-      if (!success) {
-        console.log('Sound does not play')
-      }
-    })
-    setTimeout(() => {
-      setIsDisabled(false)
-    }, 1800);
+  const changeModalVisible = (bool) => {
+    setModalVisible(bool)
   }
-
-  const startVibration = () => {
-    Vibration.vibrate(1000);
-  };
 
   return (
     <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#ffbe5d', '#ffd75d', '#fcf067']} style={styles.linearGradient}>
@@ -84,34 +63,36 @@ const Home = ({ navigation }) => {
 
         <View style={{ alignItems: 'center' }}>
           <Text style={styles.text}>Welcome to</Text>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.logo}>HappyHouse</Text>
-            <View style={{ flexDirection: 'column' }}>
-              <TouchableOpacity
-                onPress={playSound}
-                disabled={isDisabled}
-              >
-                <View>
-                  <FontAwesome name="bell" size={20} color='#000' />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={startVibration}
-              >
-                <View><MaterialIcons name="vibration" size={20} color='#000' /></View>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <Text style={styles.logo}>HappyHouse</Text>
           <Text style={styles.boldText}>Find your sweet home</Text>
-          <Button
-            style={styles.button}
-            mode="contained"
-            onPress={() => {
-              navigation.replace('List')
-            }}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <Button style={styles.button}
+              mode="contained"
+              onPress={() => changeModalVisible(true)}
+            >
+              Notification API
+            </Button>
+            <Button
+              style={styles.button}
+              mode="contained"
+              onPress={() => {
+                navigation.replace('List')
+              }}
+            >
+              Get started
+            </Button>
+          </View>
+          <Modal
+            transparent={true}
+            animationType='fade'
+            visible={modalVisible}
+            onRequestClose={() => changeModalVisible(false)}
           >
-            Get started
-          </Button>
+            <NotificationAPIModal
+              changeModalVisible={changeModalVisible}
+            />
+          </Modal>
+
         </View>
       </View>
     </LinearGradient>
@@ -165,8 +146,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   button: {
-    marginTop: 16,
-    paddingHorizontal: 10,
+    margin: 16,
+    paddingHorizontal: 8,
     paddingVertical: 6
   }
 });

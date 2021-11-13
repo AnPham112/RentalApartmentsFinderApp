@@ -73,11 +73,16 @@ const CreateProperty = ({ navigation, route }) => {
           reporter: data.reporter,
           note: note
         })
-      }).then(res => res.json())
-        .then(data => {
+      }).then(async res => {
+        const data = await res.json()
+        if (res.ok) {
           Alert.alert("Property is created successfully")
           navigation.navigate("List")
-        })
+        } else {
+          Alert.alert('Warning', data.message)
+          console.log(data.message)
+        }
+      })
         .catch((err) => console.log(err))
     }
   }
@@ -100,11 +105,17 @@ const CreateProperty = ({ navigation, route }) => {
           reporter: data.reporter,
           note: note
         })
-      }).then(res => res.json())
-        .then(data => {
+      }).then(async res => {
+        const data = await res.json()
+        if (res.ok) {
           Alert.alert("Property is updated successfully")
           navigation.navigate("List")
-        }).catch((err) => console.log(err))
+        } else {
+          Alert.alert('Warning', data.message)
+          console.log(data.message)
+        }
+      })
+        .catch((err) => console.log(err))
     }
   }
 
@@ -195,6 +206,10 @@ const CreateProperty = ({ navigation, route }) => {
               required: {
                 value: true,
                 message: 'The number of bedrooms is required'
+              },
+              min: {
+                value: 0,
+                message: 'Value must be greater than or equal to 0'
               }
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -219,6 +234,10 @@ const CreateProperty = ({ navigation, route }) => {
               required: {
                 value: true,
                 message: 'Monthy price is required'
+              },
+              min: {
+                value: 0,
+                message: 'Value must be greater than or equal to 0'
               }
             }}
             render={({ field: { onChange, onBlur, value } }) => (

@@ -2,6 +2,12 @@ const Property = require('../models/property');
 const Note = require('../models/note');
 
 exports.createProperty = (req, res) => {
+  Property.findOne({ name: req.body.name })
+    .exec((error, property) => {
+      if (property) return res.status(400).json({
+        message: 'Property name already exists'
+      })
+    })
   const { name, address, type, furniture, bedroom, price, reporter, note } = req.body;
   const property = new Property({
     name,
@@ -31,6 +37,12 @@ exports.deleteProperty = (req, res) => {
 }
 
 exports.updateProperty = (req, res) => {
+  Property.findOne({ name: req.body.name })
+    .exec((error, property) => {
+      if (property) return res.status(400).json({
+        message: 'Property name already exists'
+      })
+    })
   const { name, address, type, furniture, bedroom, price, reporter, note } = req.body;
   Property.findByIdAndUpdate(req.body.id, {
     name,
