@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, StyleSheet, Alert, Text } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
 import { useForm, Controller } from "react-hook-form";
 import LinearGradient from 'react-native-linear-gradient';
+import InputField from '../components/InputField';
 
 const CreateProperty = ({ navigation, route }) => {
   const { control, handleSubmit, formState: { errors } } = useForm();
@@ -132,11 +133,9 @@ const CreateProperty = ({ navigation, route }) => {
               }
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Property name"
-                placeholder="Enter property name here"
-                mode="outlined"
-                style={styles.input}
+              <InputField
+                label={'Property name'}
+                placeholder={'Enter property name here'}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -156,11 +155,9 @@ const CreateProperty = ({ navigation, route }) => {
               }
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Property address"
-                placeholder="Enter detailed address here"
-                mode="outlined"
-                style={styles.input}
+              <InputField
+                label={'Property address'}
+                placeholder={'Enter detailed address here'}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -213,15 +210,13 @@ const CreateProperty = ({ navigation, route }) => {
               }
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Number of bedrooms"
-                placeholder="Enter the number of bedrooms here"
-                mode="outlined"
-                style={styles.input}
+              <InputField
+                label={'Number of bedrooms'}
+                placeholder={'Enter the number of bedrooms here'}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                keyboardType="numeric"
+                keyboardType={'numeric'}
               />
             )}
             name="bedroom"
@@ -241,15 +236,13 @@ const CreateProperty = ({ navigation, route }) => {
               }
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Monthly price"
-                placeholder="Enter monthly price here"
-                mode="outlined"
-                style={styles.input}
+              <InputField
+                label={'Monthly price'}
+                placeholder={'Enter monthly price here'}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                keyboardType="numeric"
+                keyboardType={'numeric'}
               />
             )}
             name="monthlyPrice"
@@ -265,11 +258,9 @@ const CreateProperty = ({ navigation, route }) => {
               }
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Repoter"
-                placeholder="Enter name of reporter here"
-                mode="outlined"
-                style={styles.input}
+              <InputField
+                label={'Repoter'}
+                placeholder={'Enter name of reporter here'}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -279,11 +270,9 @@ const CreateProperty = ({ navigation, route }) => {
             defaultValue={reporter}
           />
           {errors.reporter && <Text style={styles.errMessage}>{errors.reporter.message}</Text>}
-          <TextInput
-            label="Note"
-            style={styles.input}
-            placeholder="Enter a note here"
-            mode="outlined"
+          <InputField
+            label={'Note'}
+            placeholder={'Enter a note here'}
             value={note}
             onChangeText={text => setNote(text)}
           />
@@ -340,6 +329,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 6,
     marginBottom: 8
+  },
+  linearGradient: {
+    flex: 1
   }
 })
 

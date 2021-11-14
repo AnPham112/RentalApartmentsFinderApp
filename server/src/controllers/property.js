@@ -7,24 +7,25 @@ exports.createProperty = (req, res) => {
       if (property) return res.status(400).json({
         message: 'Property name already exists'
       })
+      const { name, address, type, furniture, bedroom, price, reporter, note } = req.body;
+      const _property = new Property({
+        name,
+        address,
+        type,
+        furniture,
+        bedroom,
+        price,
+        reporter,
+        note
+      })
+      _property.save()
+        .then(data => {
+          res.send(data)
+        }).catch(err => {
+          console.log(err)
+        })
     })
-  const { name, address, type, furniture, bedroom, price, reporter, note } = req.body;
-  const property = new Property({
-    name,
-    address,
-    type,
-    furniture,
-    bedroom,
-    price,
-    reporter,
-    note
-  })
-  property.save()
-    .then(data => {
-      res.send(data)
-    }).catch(err => {
-      console.log(err)
-    })
+
 }
 
 exports.deleteProperty = (req, res) => {
@@ -39,25 +40,24 @@ exports.deleteProperty = (req, res) => {
 exports.updateProperty = (req, res) => {
   Property.findOne({ name: req.body.name })
     .exec((error, property) => {
-      if (property) return res.status(400).json({
-        message: 'Property name already exists'
+      if (property) return res.status(400).json({ message: 'Property name already exists' })
+      const { name, address, type, furniture, bedroom, price, reporter, note } = req.body;
+      Property.findByIdAndUpdate(req.body.id, {
+        name,
+        address,
+        type,
+        furniture,
+        bedroom,
+        price,
+        reporter,
+        note
+      }).then(data => {
+        res.send(data)
+      }).catch(err => {
+        console.log("error", err)
       })
+
     })
-  const { name, address, type, furniture, bedroom, price, reporter, note } = req.body;
-  Property.findByIdAndUpdate(req.body.id, {
-    name,
-    address,
-    type,
-    furniture,
-    bedroom,
-    price,
-    reporter,
-    note
-  }).then(data => {
-    res.send(data)
-  }).catch(err => {
-    console.log("error", err)
-  })
 }
 
 exports.getList = (req, res) => {
@@ -82,6 +82,6 @@ exports.createNote = async (req, res) => {
 
 exports.getNotes = async (req, res) => {
   const property = await Property.findById(req.body.id)
-    .populate('notes');
+    .populate('notes')
   res.status(200).json({ notes: property.notes })
 }

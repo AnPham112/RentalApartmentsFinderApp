@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, Text, View, StyleSheet, Alert, FlatList } from 'react-native';
+import { ScrollView, Text, View, StyleSheet, Alert } from 'react-native';
 import { Button, Title } from 'react-native-paper';
 import { DataTable, TextInput } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -47,7 +47,7 @@ const Detail = (props) => {
       .catch((err) => console.log(err))
   }
 
-  const getNotes = () => {
+  useEffect(() => {
     fetch(`http://192.168.1.24:3000/get-notes`, {
       method: 'POST',
       headers: {
@@ -56,12 +56,12 @@ const Detail = (props) => {
       body: JSON.stringify({
         id: _id
       })
-    }).then(res => res.json())
-      .then(results => setData(results.notes))
-  }
-
-  useEffect(() => {
-    getNotes()
+    }).then(async res => {
+      const results = await res.json()
+      if (res.ok) {
+        if (results) { setData(results.notes) }
+      }
+    })
   }, [data]);
 
   const deleteConfirmationAlert = () => {
@@ -146,13 +146,13 @@ const Detail = (props) => {
               onPress={() => addNote()}
             >Add</Button>
           </View>
-
-          <View style={styles.cardStyle}>
+          {note ? (<View style={styles.cardStyle}>
             <View style={styles.cardViews}>
               <Text>{moment(createdAt).format('MMM Do YYYY, h:mm:ss a')}</Text>
               <Text style={styles.note}>{note}</Text>
             </View>
-          </View>
+          </View>) : null}
+
           {renderNotes()}
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 16, marginBottom: 16 }}>
@@ -179,6 +179,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
+  },
+  linearGradient: {
+    flex: 1
   },
   title: {
     marginVertical: 8,
