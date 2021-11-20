@@ -19,54 +19,36 @@ exports.createProperty = (req, res) => {
         note
       })
       _property.save()
-        .then(data => {
-          res.send(data)
-        }).catch(err => {
-          console.log(err)
-        })
+        .then(data => res.send(data))
+        .catch(err => console.log(err))
     })
-
 }
 
 exports.deleteProperty = (req, res) => {
   Property.findByIdAndRemove(req.body.id)
-    .then(data => {
-      res.send(data)
-    }).catch((err) => {
-      console.log("error", err)
-    })
+    .then(data => res.send(data))
+    .catch(err => console.log(err))
 }
 
 exports.updateProperty = (req, res) => {
-  Property.findOne({ name: req.body.name })
-    .exec((error, property) => {
-      if (property) return res.status(400).json({ message: 'Property name already exists' })
-      const { name, address, type, furniture, bedroom, price, reporter, note } = req.body;
-      Property.findByIdAndUpdate(req.body.id, {
-        name,
-        address,
-        type,
-        furniture,
-        bedroom,
-        price,
-        reporter,
-        note
-      }).then(data => {
-        res.send(data)
-      }).catch(err => {
-        console.log("error", err)
-      })
-
-    })
+  const { name, address, type, furniture, bedroom, price, reporter, note } = req.body;
+  Property.findByIdAndUpdate(req.body.id, {
+    name,
+    address,
+    type,
+    furniture,
+    bedroom,
+    price,
+    reporter,
+    note
+  }).then(data => res.send(data))
+    .catch(err => console.log(err))
 }
 
 exports.getList = (req, res) => {
   Property.find({})
-    .then((data) => {
-      res.send(data)
-    }).catch((err) => {
-      console.log(err)
-    })
+    .then(data => res.send(data))
+    .catch(err => console.log(err))
 }
 
 exports.createNote = async (req, res) => {

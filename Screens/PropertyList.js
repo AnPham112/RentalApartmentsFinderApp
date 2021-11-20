@@ -34,7 +34,7 @@ const PropertyList = ({ navigation }) => {
           <View style={styles.row}>
             <InfoIcon name={'home'} size={20} color={'#000'}>{item.type}</InfoIcon>
             <InfoIcon name={'bed'} size={20} color={'#000'}>{item.bedroom}</InfoIcon>
-            <InfoIcon name={'tag'} size={20} color={'#000'}>{item.price}</InfoIcon>
+            <InfoIcon name={'tag'} size={20} color={'#000'}>${item.price}</InfoIcon>
             <InfoIcon name={'user-cog'} size={20} color={'#000'}>{item.reporter}</InfoIcon>
           </View>
         </View>

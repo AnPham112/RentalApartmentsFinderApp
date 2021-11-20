@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     marginRight: 16
   },
   iconStyle: {
-    marginRight: 8
+    marginRight: 4
   },
   text: {
     color: '#1C1C1C'

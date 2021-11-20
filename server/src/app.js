@@ -6,12 +6,8 @@ const mongoURI = "mongodb+srv://phamquocan:phamquocan112@cluster0.sbpfh.mongodb.
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-})
-mongoose.connection.on('connected', () => {
-  console.log('Database connected')
-})
-mongoose.connection.on('error', (err) => {
-  console.log('error', err)
+}).then(() => {
+  console.log('Database connected');
 })
 
 app.use(express.json());

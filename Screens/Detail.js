@@ -23,11 +23,13 @@ const Detail = (props) => {
       body: JSON.stringify({
         id: _id
       })
-    }).then(res => res.json())
-      .then(result => {
-        Alert.alert("Property is removed successfully");
-        props.navigation.navigate('List');
-      }).catch(err => {
+    }).then(res => {
+      if (res.ok) {
+        Alert.alert("Property is updated successfully")
+        props.navigation.navigate("List")
+      }
+    })
+      .catch(err => {
         console.log(err);
       })
   }
@@ -58,8 +60,8 @@ const Detail = (props) => {
       })
     }).then(async res => {
       const results = await res.json()
-      if (res.ok) {
-        if (results) { setData(results.notes) }
+      if (results) {
+        setData(results.notes)
       }
     })
   }, [data]);

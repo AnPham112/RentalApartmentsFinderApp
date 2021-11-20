@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, StyleSheet, Alert, Text } from 'react-native';
 import { Button } from 'react-native-paper';
-import { Picker } from '@react-native-picker/picker';
 import { useForm, Controller } from "react-hook-form";
 import LinearGradient from 'react-native-linear-gradient';
 import InputField from '../components/InputField';
+import PickerField from '../components/PickerField';
 
 const CreateProperty = ({ navigation, route }) => {
   const { control, handleSubmit, formState: { errors } } = useForm();
+
+  const propertyTypeList = [
+    { label: 'Select property type', value: '' },
+    { label: 'Apartment', value: 'Apartment' },
+    { label: 'House', value: 'House' },
+    { label: 'Penthouse', value: 'Penthouse' },
+    { label: 'Villa', value: 'Villa' }
+  ]
+
+  const furnitureTypeList = [
+    { label: 'Select furniture type', value: '' },
+    { label: 'Unfurnished', value: 'Unfurnished' },
+    { label: 'Half furnished', value: 'Half furnished' },
+    { label: 'Furnished', value: 'Furnished' }
+  ]
 
   const getDetails = (category) => {
     if (route.params) {
@@ -57,7 +72,7 @@ const CreateProperty = ({ navigation, route }) => {
     handleSelected()
   }, [type]);
 
-  const createProperty = (data) => {
+  const createProperty = (inputValue) => {
     if (isSelected) {
       fetch("http://192.168.1.24:3000/create-property", {
         method: 'POST',
@@ -65,13 +80,13 @@ const CreateProperty = ({ navigation, route }) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          name: data.propertyName,
-          address: data.address,
+          name: inputValue.propertyName,
+          address: inputValue.address,
           type: type,
           furniture: furniture,
-          bedroom: data.bedroom,
-          price: data.monthlyPrice,
-          reporter: data.reporter,
+          bedroom: inputValue.bedroom,
+          price: inputValue.monthlyPrice,
+          reporter: inputValue.reporter,
           note: note
         })
       }).then(async res => {
@@ -106,14 +121,10 @@ const CreateProperty = ({ navigation, route }) => {
           reporter: data.reporter,
           note: note
         })
-      }).then(async res => {
-        const data = await res.json()
+      }).then(res => {
         if (res.ok) {
           Alert.alert("Property is updated successfully")
           navigation.navigate("List")
-        } else {
-          Alert.alert('Warning', data.message)
-          console.log(data.message)
         }
       })
         .catch((err) => console.log(err))
@@ -145,7 +156,6 @@ const CreateProperty = ({ navigation, route }) => {
             defaultValue={propertyName}
           />
           {errors.propertyName && <Text style={styles.errMessage}>{errors.propertyName.message}</Text>}
-
           <Controller
             control={control}
             rules={{
@@ -167,36 +177,20 @@ const CreateProperty = ({ navigation, route }) => {
             defaultValue={address}
           />
           {errors.address && <Text style={styles.errMessage}>{errors.address.message}</Text>}
-          <Picker
+          <PickerField
             accessibilityValue={type}
             selectedValue={type}
             onValueChange={(value) => setType(value)}
-            mode="dropdown"
-            dropdownIconColor="purple"
-            dropdownIconRippleColor="purple"
-            style={styles.picker}
-          >
-            <Picker.Item label="Select property type" value="" />
-            <Picker.Item label="Apartment" value="Apartment" />
-            <Picker.Item label="House" value="House" />
-            <Picker.Item label="Penthouse" value="Penthouse" />
-            <Picker.Item label="Villa" value="Villa" />
-          </Picker>
+            options={propertyTypeList}
+          />
           {isSelected ? null : <Text style={styles.errMessage}>{typeError}</Text>}
-          <Picker
+          <PickerField
             accessibilityValue={furniture}
             selectedValue={furniture}
             onValueChange={(value) => setFurniture(value)}
-            mode="dropdown"
-            dropdownIconColor="purple"
-            dropdownIconRippleColor="purple"
-            style={styles.picker}
-          >
-            <Picker.Item label="Select furniture type" value="" />
-            <Picker.Item label="Unfurnished" value="Unfurnished" />
-            <Picker.Item label="Half furnished" value="Half furnished" />
-            <Picker.Item label="Furnished" value="Furnished" />
-          </Picker>
+            options={furnitureTypeList}
+          />
+
           <Controller
             control={control}
             rules={{
@@ -315,13 +309,6 @@ const CreateProperty = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  },
-  input: {
-    marginHorizontal: 6,
-    marginBottom: 8
-  },
-  picker: {
-    marginBottom: 8
   },
   errMessage: {
     fontSize: 14,

@@ -12,7 +12,7 @@ const NotificationAPIModal = (props) => {
 
   const sound = new Sound('doorbell.mp3', Sound.MAIN_BUNDLE, (error) => {
     if (error) {
-      console.log('failed to load the sound', error);
+      console.log('Could not load the audio', error);
       return;
     }
   });
@@ -47,14 +47,14 @@ const NotificationAPIModal = (props) => {
       style={styles.container}>
       <View style={styles.modal}>
         <View style={styles.textView}>
-          <Text style={[styles.titleText, { color: 'purple' }]}>
+          <Text style={styles.titleText}>
             Notification API
           </Text>
           <Text style={styles.descText}>
             Click the button to execute the feature
           </Text>
         </View>
-        <View style={styles.buttonsView}>
+        <View style={styles.buttonsContainer}>
           <TouchableOpacity
             style={styles.touchableOpacity}
             disabled={ringIsDisabled}
@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
   },
   textView: {
     flex: 1,
-    // alignItems: 'center'
   },
   titleText: {
     color: 'purple',
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: 'center'
   },
-  buttonsView: {
+  buttonsContainer: {
     width: '100%',
     flexDirection: 'row'
   },
